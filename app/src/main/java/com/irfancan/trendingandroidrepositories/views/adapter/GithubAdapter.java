@@ -6,17 +6,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.irfancan.trendingandroidrepositories.R;
+import com.irfancan.trendingandroidrepositories.model.GithubRepo;
 import com.irfancan.trendingandroidrepositories.views.viewholder.GithubViewHolder;
+
+import java.util.List;
 
 public class GithubAdapter extends RecyclerView.Adapter<GithubViewHolder> {
 
     //Will change this once I create model
-    private String[] mDataset;
+    private List<GithubRepo> mAndroidRepos;
 
 
     // Adapter Constructor
-    public GithubAdapter(String[] myDataset) {
-        mDataset = myDataset;
+    public GithubAdapter(List<GithubRepo> androidRepos) {
+        mAndroidRepos = androidRepos;
     }
 
 
@@ -37,12 +40,12 @@ public class GithubAdapter extends RecyclerView.Adapter<GithubViewHolder> {
     public void onBindViewHolder(GithubViewHolder holder, int position) {
 
 
-        holder.mRepositoryNameTextView.setText(mDataset[position]);
+        holder.mRepositoryNameTextView.setText(mAndroidRepos.get(position).getName());
 
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mAndroidRepos.size();
     }
 }
