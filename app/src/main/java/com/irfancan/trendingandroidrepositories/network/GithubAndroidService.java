@@ -7,10 +7,11 @@ import java.util.List;
 import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface GithubAndroidService {
 
-    @GET("/users/{user}/repos")
-    Single<List<GithubRepo>> getAndroidRepos(@Path("user") String user);
+    @GET("/repositories?")
+    Single<List<GithubRepo>> getAndroidRepos(@Query("language") String language);
 
 }

@@ -55,7 +55,8 @@ public class GithubPresenter {
         GithubAndroidService apiService = getClient().create(GithubAndroidService.class);
 
 
-        apiService.getAndroidRepos("")
+        //PROGRAMMING_LANGUAGE_KOTLIN  ->  Since KOTLIN is the trending language now in Android, I decided to search trending repositories related to KOTLIN rather than JAVA
+        apiService.getAndroidRepos(Constants.PROGRAMMING_LANGUAGE_KOTLIN)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<List<GithubRepo>>() {

@@ -2,7 +2,9 @@ package com.irfancan.trendingandroidrepositories.views.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.irfancan.trendingandroidrepositories.R;
@@ -24,10 +26,9 @@ public class GithubAdapter extends RecyclerView.Adapter<GithubViewHolder> {
 
 
     @Override
-    public GithubViewHolder onCreateViewHolder(ViewGroup parent,
+    public GithubViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-                                                     int viewType) {
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
+        LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.repository_name_row, parent, false);
 
         GithubViewHolder vh = new GithubViewHolder(v);
@@ -37,10 +38,16 @@ public class GithubAdapter extends RecyclerView.Adapter<GithubViewHolder> {
 
 
     @Override
-    public void onBindViewHolder(GithubViewHolder holder, int position) {
+    public void onBindViewHolder(GithubViewHolder holder, final int position) {
 
 
         holder.mRepositoryNameTextView.setText(mAndroidRepos.get(position).getName());
+        holder.mRepositoryNameRowLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAndroidRepos.get(position);
+            }
+        });
 
     }
 
