@@ -30,6 +30,7 @@ public class ReposListFragment extends Fragment implements ViewContract,RowClick
     private RecyclerView.Adapter mGithubAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    //Presenter. Created this to follow MVP design pattern
     private GithubPresenter mGithubPresenter;
 
     //ProgressBar
