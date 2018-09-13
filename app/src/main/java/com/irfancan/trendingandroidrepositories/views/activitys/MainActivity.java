@@ -29,7 +29,14 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+
+
+    /** Responsible in switching Fragments **/
     public void startFragmentTransaction(String fragmentConstant,GithubRepo githubRepo){
+
+
+        //Constants.REPOS_LIST_FRAGMENT   -> Displays trending repos
+        //Constants.REPO_DETAILS_FRAGMENT -> Displays details of repo user selected
 
         if(fragmentConstant.equals(Constants.REPOS_LIST_FRAGMENT)){
 
@@ -44,6 +51,7 @@ public class MainActivity extends AppCompatActivity{
 
             RepoDetailsFragment repoDetailsFragment = new RepoDetailsFragment();
 
+            //Data will be placed inside a bundle which will be used to update the views of the REPO_DETAILS_FRAGMENT fragment
             if(githubRepo!=null){
 
                 Bundle repoDetailsBundle = new Bundle();
@@ -57,14 +65,11 @@ public class MainActivity extends AppCompatActivity{
                 repoDetailsFragment.setArguments(repoDetailsBundle);
              }
 
+             //Changes fragment using an animation for a better experience :)
             getSupportFragmentManager()
                     .beginTransaction().setCustomAnimations(R.anim.slide_in_right,R.anim.slide_out_left)
                     .replace(R.id.fragmentContainer, repoDetailsFragment).addToBackStack(null).commit();
         }
-
-
-
-
 
 
     }
