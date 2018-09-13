@@ -6,6 +6,7 @@ import android.util.Log;
 import com.irfancan.trendingandroidrepositories.constants.Constants;
 import com.irfancan.trendingandroidrepositories.model.GithubRepo;
 import com.irfancan.trendingandroidrepositories.network.GithubAndroidService;
+import com.irfancan.trendingandroidrepositories.network.service.RetrofitService;
 import com.irfancan.trendingandroidrepositories.views.ViewContract;
 
 import java.util.List;
@@ -13,16 +14,10 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GithubPresenter {
 
     private ViewContract mViewContract;
-
-    private static Retrofit retrofit = null;
-
 
     //Constructor
     public GithubPresenter(ViewContract viewContract){
@@ -32,27 +27,13 @@ public class GithubPresenter {
     }
 
 
-    public static Retrofit getClient() {
-
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.BASE_URL)
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-        return retrofit;
-    }
-
-
-
-
-
-    //FETCH Popular Movies
+    //FETCH Android Repositories. Will be fetched with RxJAVA
+    // * onSuccess -> Will fill the recyclerview with list of trending repos
+    // * onError   -> Will display an error message
     public void getAndroidReposFromGithub(){
 
         //Service that will fetch Android repos
-        GithubAndroidService apiService = getClient().create(GithubAndroidService.class);
+        GithubAndroidService apiService = RetrofitService.getClient().create(GithubAndroidService.class);
 
 
         //PROGRAMMING_LANGUAGE_KOTLIN  ->  Since KOTLIN is the trending language now in Android, I decided to search trending repositories related to KOTLIN rather than JAVA
@@ -82,13 +63,6 @@ public class GithubPresenter {
 
 
     }
-
-
-
-
-
-
-
 
 
 }

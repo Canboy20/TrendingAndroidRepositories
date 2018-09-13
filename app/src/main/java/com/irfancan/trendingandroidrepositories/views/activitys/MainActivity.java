@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
                 repoDetailsFragment.setArguments(repoDetailsBundle);
              }
 
-             //Changes fragment using an animation for a better experience :)
+             //Changes fragment using an animation. Makes the switching prettier :)
             getSupportFragmentManager()
                     .beginTransaction().setCustomAnimations(R.anim.slide_in_right,R.anim.slide_out_left)
                     .replace(R.id.fragmentContainer, repoDetailsFragment).addToBackStack(null).commit();
