@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity{
 
         //There are two types of fragments. ReposListFragment (Contains a list of trending repos) and RepoDetailsFragment(displays details of a repo )
         //At start the list of trending repos will be displayed
+        //
         startFragmentTransaction(Constants.REPOS_LIST_FRAGMENT,null);
 
     }
