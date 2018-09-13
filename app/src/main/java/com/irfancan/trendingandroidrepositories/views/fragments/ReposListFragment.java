@@ -38,6 +38,8 @@ public class ReposListFragment extends Fragment implements ViewContract,RowClick
     //Error TextView
     private TextView errorOccuredTextView;
 
+    private List<GithubRepo> githubRepos;
+
 
 
     @Override
@@ -56,8 +58,14 @@ public class ReposListFragment extends Fragment implements ViewContract,RowClick
         //Error TextView
         errorOccuredTextView=rootView.findViewById(R.id.errorOccuredTextView);
 
-        //Make request
-        mGithubPresenter.getAndroidReposFromGithub();
+        //Make API request.
+        // * If githubRepos != null, it means that we already have a list of repos (did an API request before), therefore no need make an API request again.
+        // * If its null, it means that we need to make an API request to get the list of repos
+        if(githubRepos!=null){
+            updateRecyclerViewWithRepoData(githubRepos);
+        }else{
+            mGithubPresenter.getAndroidReposFromGithub();
+        }
 
         return rootView;
     }
@@ -89,6 +97,8 @@ public class ReposListFragment extends Fragment implements ViewContract,RowClick
     //The methods below will be used to fill the recyclerview with data
     @Override
     public void updateRecyclerViewWithRepoData(List<GithubRepo> rootResponse) {
+
+        githubRepos=rootResponse;
 
         progressBar.setVisibility(View.GONE);
         mGithubRecyclerView.setVisibility(View.VISIBLE);
