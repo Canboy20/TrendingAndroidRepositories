@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">TrendingAndroidRepositories</string>
     <string name="repo_name">Repository name goes here</string>
+    <string name="error_occured">An error occurred while fetching the data</string>
+
+    <string name="author_area">Author goes here</string>
+    <string name="description_area">Description goes here</string>
+    <string name="stars_area">Num of Starts goes here</string>
+    <string name="forks_area">Num of Forks goes here</string>
+    <string name="currentPeriodStars_area">Current Period Stars goes here</string>
 
 </resources>
+

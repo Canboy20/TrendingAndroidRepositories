@@ -1,4 +1,4 @@
-package com.irfancan.trendingandroidrepositories.views.viewholder;
+package com.irfancan.trendingandroidrepositories.views.recyclerview.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.widget.LinearLayout;

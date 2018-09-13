@@ -9,4 +9,6 @@ public interface ViewContract {
     void updateRecyclerViewWithRepoData(List<GithubRepo> rootResponse);
 
     void displayError();
+
+
 }

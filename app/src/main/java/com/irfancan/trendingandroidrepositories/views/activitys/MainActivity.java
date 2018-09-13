@@ -2,73 +2,73 @@ package com.irfancan.trendingandroidrepositories.views.activitys;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import com.irfancan.trendingandroidrepositories.R;
+import com.irfancan.trendingandroidrepositories.constants.Constants;
 import com.irfancan.trendingandroidrepositories.model.GithubRepo;
-import com.irfancan.trendingandroidrepositories.presenter.GithubPresenter;
-import com.irfancan.trendingandroidrepositories.views.adapter.GithubAdapter;
-import com.irfancan.trendingandroidrepositories.views.ViewContract;
+import com.irfancan.trendingandroidrepositories.views.recyclerview.adapter.GithubAdapter;
+import com.irfancan.trendingandroidrepositories.views.fragments.RepoDetailsFragment;
+import com.irfancan.trendingandroidrepositories.views.fragments.ReposListFragment;
+import com.irfancan.trendingandroidrepositories.views.recyclerview.listeners.RowClickListener;
 
-import java.util.List;
+public class MainActivity extends AppCompatActivity{
 
-public class MainActivity extends AppCompatActivity implements ViewContract {
-
-
-    private RecyclerView mGithubRecyclerView;
-    private RecyclerView.Adapter mGithubAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
-    private GithubPresenter mGithubPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
 
-        //Presenter. Will follow MVP design pattern
-        mGithubPresenter=new GithubPresenter(this);
-
-        //Setups RecyclerView (view, adapter)
-        setupRecyclerView();
-
-
-        //Make request
-        mGithubPresenter.getAndroidReposFromGithub();
-
+        //There are two types of fragments. ReposListFragment (Contains a list of trending repos) and RepoDetailsFragment(displays details of a repo )
+        //At start the list of trending repos will be displayed
+        startFragmentTransaction(Constants.REPOS_LIST_FRAGMENT,null);
 
     }
 
 
 
 
-    private void setupRecyclerView(){
+    public void startFragmentTransaction(String fragmentConstant,GithubRepo githubRepo){
 
-        mGithubRecyclerView = findViewById(R.id.github_repositories_recycler_view);
-        mGithubRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mGithubRecyclerView.setLayoutManager(mLayoutManager);
+        if(fragmentConstant.equals(Constants.REPOS_LIST_FRAGMENT)){
+
+
+            ReposListFragment reposListFragment = new ReposListFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, reposListFragment).addToBackStack(null).commit();
+
+
+
+        }else if(fragmentConstant.equals(Constants.REPO_DETAILS_FRAGMENT)){
+
+
+            RepoDetailsFragment repoDetailsFragment = new RepoDetailsFragment();
+
+            if(githubRepo!=null){
+
+                Bundle repoDetailsBundle = new Bundle();
+                repoDetailsBundle.putString(Constants.REPO_AUTHOR, githubRepo.getAuthor());
+                repoDetailsBundle.putString(Constants.REPO_NAME, githubRepo.getName());
+                repoDetailsBundle.putString(Constants.REPO_URL, githubRepo.getUrl());
+                repoDetailsBundle.putString(Constants.REPO_DESCRIPTION, githubRepo.getDescription());
+                repoDetailsBundle.putInt(Constants.REPO_STARS, githubRepo.getStars());
+                repoDetailsBundle.putInt(Constants.REPO_FORKS, githubRepo.getForks());
+                repoDetailsBundle.putInt(Constants.REPO_CURRENT_PERIOD_STARS, githubRepo.getCurrentPeriodStars());
+                repoDetailsFragment.setArguments(repoDetailsBundle);
+             }
+
+            getSupportFragmentManager()
+                    .beginTransaction().setCustomAnimations(R.anim.slide_in_right,R.anim.slide_out_left)
+                    .replace(R.id.fragmentContainer, repoDetailsFragment).addToBackStack(null).commit();
+        }
+
+
+
+
 
 
     }
 
 
 
-    //The methods below will be used to fill the recyclerview with data
-    @Override
-    public void updateRecyclerViewWithRepoData(List<GithubRepo> rootResponse) {
-
-        //Dataset will be defined once model is ready
-        mGithubAdapter = new GithubAdapter(rootResponse);
-        mGithubRecyclerView.setAdapter(mGithubAdapter);
-
-
-    }
-
-    @Override
-    public void displayError() {
-
-    }
 }
