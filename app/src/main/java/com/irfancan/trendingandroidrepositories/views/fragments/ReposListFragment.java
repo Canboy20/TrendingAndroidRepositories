@@ -73,6 +73,24 @@ public class ReposListFragment extends Fragment implements ViewContract,RowClick
 
     }
 
+    
+
+    /**OnStart will be responsible in getting repos from Github / reattempt to get repos if fragment was detached while RxJava and Retrofit tried to get data from Github**/
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        //Make API request.
+        // * If githubRepos != null, it means that we already have a list of repos (did an API request before), therefore no need make an API request again.
+        // * If its null, it means that we need to make an API request to get the list of repos
+        if(githubRepos!=null){
+            updateRecyclerViewWithRepoData(githubRepos);
+        }else{
+            mGithubPresenter.getAndroidReposFromGithub();
+        }
+
+    }
+
 
 
 
@@ -133,20 +151,7 @@ public class ReposListFragment extends Fragment implements ViewContract,RowClick
 
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
 
-        //Make API request.
-        // * If githubRepos != null, it means that we already have a list of repos (did an API request before), therefore no need make an API request again.
-        // * If its null, it means that we need to make an API request to get the list of repos
-        if(githubRepos!=null){
-            updateRecyclerViewWithRepoData(githubRepos);
-        }else{
-            mGithubPresenter.getAndroidReposFromGithub();
-        }
-
-    }
 
 
     //If this is called , then it means fragment has been detached. Therefore we must cancel all RxJava Retrofit requests. Quite Important !!
