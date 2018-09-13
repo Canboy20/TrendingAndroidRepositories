@@ -15,6 +15,7 @@ import com.irfancan.trendingandroidrepositories.R;
 import com.irfancan.trendingandroidrepositories.constants.Constants;
 import com.irfancan.trendingandroidrepositories.model.GithubRepo;
 import com.irfancan.trendingandroidrepositories.presenter.GithubPresenter;
+import com.irfancan.trendingandroidrepositories.presenter.GithubPresenterContract;
 import com.irfancan.trendingandroidrepositories.views.ViewContract;
 import com.irfancan.trendingandroidrepositories.views.activitys.MainActivity;
 import com.irfancan.trendingandroidrepositories.views.recyclerview.adapter.GithubAdapter;
@@ -31,7 +32,7 @@ public class ReposListFragment extends Fragment implements ViewContract,RowClick
     private RecyclerView.LayoutManager mLayoutManager;
 
     //Presenter. Created this to follow MVP design pattern
-    private GithubPresenter mGithubPresenter;
+    private GithubPresenterContract mGithubPresenter;
 
     //ProgressBar
     private ProgressBar progressBar;
@@ -59,14 +60,6 @@ public class ReposListFragment extends Fragment implements ViewContract,RowClick
         //Error TextView
         errorOccuredTextView=rootView.findViewById(R.id.errorOccuredTextView);
 
-        //Make API request.
-        // * If githubRepos != null, it means that we already have a list of repos (did an API request before), therefore no need make an API request again.
-        // * If its null, it means that we need to make an API request to get the list of repos
-        if(githubRepos!=null){
-            updateRecyclerViewWithRepoData(githubRepos);
-        }else{
-            mGithubPresenter.getAndroidReposFromGithub();
-        }
 
         return rootView;
     }
@@ -137,4 +130,30 @@ public class ReposListFragment extends Fragment implements ViewContract,RowClick
         }
 
     }
+
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        //Make API request.
+        // * If githubRepos != null, it means that we already have a list of repos (did an API request before), therefore no need make an API request again.
+        // * If its null, it means that we need to make an API request to get the list of repos
+        if(githubRepos!=null){
+            updateRecyclerViewWithRepoData(githubRepos);
+        }else{
+            mGithubPresenter.getAndroidReposFromGithub();
+        }
+
+    }
+
+
+    //If this is called , then it means fragment has been detached. Therefore we must cancel all RxJava Retrofit requests. Quite Important !!
+    @Override
+    public void onStop() {
+        super.onStop();
+        mGithubPresenter.detachView();
+    }
+
 }

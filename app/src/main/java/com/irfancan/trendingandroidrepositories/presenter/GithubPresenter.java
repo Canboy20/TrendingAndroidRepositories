@@ -12,12 +12,18 @@ import com.irfancan.trendingandroidrepositories.views.ViewContract;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class GithubPresenter {
+public class GithubPresenter implements GithubPresenterContract {
 
     private ViewContract mViewContract;
+
+    //This will be used in cancelling the Retrofit request if the fragment is detached while RxJava is trying to fetch repos list data from Github.
+    //Prevents trying to update views which don't exist anymore due to detachment of fragment.
+    private CompositeDisposable mRequestsDisposables = new CompositeDisposable();
+
 
     //Constructor
     public GithubPresenter(ViewContract viewContract){
@@ -37,7 +43,7 @@ public class GithubPresenter {
 
 
         //PROGRAMMING_LANGUAGE_KOTLIN  ->  Since KOTLIN is the trending language now in Android, I decided to search trending repositories related to KOTLIN rather than JAVA
-        apiService.getAndroidRepos(Constants.PROGRAMMING_LANGUAGE_KOTLIN)
+        mRequestsDisposables.add(apiService.getAndroidRepos(Constants.PROGRAMMING_LANGUAGE_KOTLIN)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<List<GithubRepo>>() {
@@ -58,9 +64,17 @@ public class GithubPresenter {
 
 
                     }
-                });
+                }));
 
 
+
+    }
+
+    @Override
+    public void detachView() {
+
+        //Disposes RxJava subscriptions to prevent non existing views from being updated due to detachment of fragment
+        mRequestsDisposables.clear();
 
     }
 
